@@ -1,12 +1,16 @@
-package com.example.carshowroom.screen.main
+package com.example.carshowroom.screen.main.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import com.example.carshowroom.R
+import com.example.carshowroom.screen.main.view.ui.MainScreenView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+            MainScreenView()
+        }
     }
 }

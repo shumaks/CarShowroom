@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarShowroom">
         <activity
-            android:name=".screen.main.MainActivity"
+            android:name=".screen.main.view.MainActivity"
             android:exported="false" />
         <activity
             android:name=".screen.auth.view.AuthActivity"
