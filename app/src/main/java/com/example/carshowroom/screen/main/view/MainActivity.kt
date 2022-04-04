@@ -9,6 +9,7 @@ import com.example.carshowroom.screen.main.view.ui.MainScreenView
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContent {
             MainScreenView()
         }

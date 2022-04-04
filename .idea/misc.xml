@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/CarShowroom/app/src/main/res/drawable/ic_auto.xml" value="0.2" />
+        <entry key="..\:/CarShowroom/app/src/main/res/drawable/ic_clients.xml" value="0.304" />
+        <entry key="..\:/CarShowroom/app/src/main/res/drawable/ic_employees.xml" value="0.304" />
+        <entry key="..\:/CarShowroom/app/src/main/res/drawable/ic_sales.xml" value="0.304" />
         <entry key="..\:/CarShowroom/app/src/main/res/layout/activity_auth.xml" value="0.19166666666666668" />
         <entry key="..\:/CarShowroom/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/CarShowroom/app/src/main/res/layout/fragment_auth.xml" value="0.3578125" />
