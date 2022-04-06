@@ -1,4 +1,4 @@
-package com.example.carshowroom.screen.main.view.ui
+package com.example.carshowroom.screen.main.view.ui.clients
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.carshowroom.repo.client.entity.Client
 
 @Composable
-fun ListItemView(item: Int) {
+fun ClientsListView(item: Client) {
     Card(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp).fillMaxWidth(),
         elevation = 2.dp,
@@ -27,8 +27,8 @@ fun ListItemView(item: Int) {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = item.toString(), style = typography.h6)
-            Text(text = "VIEW DETAIL", style = typography.caption)
+            Text(text = item.surname, style = MaterialTheme.typography.h6)
+            Text(text = item.name, style = MaterialTheme.typography.caption)
         }
     }
 }

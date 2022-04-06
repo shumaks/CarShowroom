@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import com.example.carshowroom.screen.auth.view.ui.LoginView
-import com.example.carshowroom.screen.auth.viewmodel.AuthViewModel
 import org.koin.androidx.compose.getViewModel
 
 class AuthFragment : Fragment() {
