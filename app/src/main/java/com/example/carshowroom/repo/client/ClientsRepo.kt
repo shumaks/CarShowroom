@@ -1,5 +1,6 @@
 package com.example.carshowroom.repo.client
 
+import com.example.carshowroom.repo.client.entity.Client
 import com.example.carshowroom.service.retrofit.APIService
 
 class ClientsRepo(
@@ -7,4 +8,6 @@ class ClientsRepo(
 ) {
 
     fun getClientsList() = apiService.getClients()
+
+    fun updateClientsList(client: Client) = apiService.updateClient(client)
 }

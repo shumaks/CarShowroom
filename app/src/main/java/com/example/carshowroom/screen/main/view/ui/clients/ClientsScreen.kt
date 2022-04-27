@@ -20,12 +20,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.carshowroom.R
 import com.example.carshowroom.screen.main.view.ui.auto.AutoListView
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
 
 @Composable
-fun ClientsScreen(viewModel: MainViewModel) {
+fun ClientsScreen(viewModel: MainViewModel, navController: NavHostController) {
     val clientsList by viewModel.clientsListStateFlow.collectAsState()
 
     Column(
@@ -40,7 +41,7 @@ fun ClientsScreen(viewModel: MainViewModel) {
             items(
                 items = clientsList,
                 itemContent = {
-                    ClientsListView(item = it)
+                    ClientsListView(item = it, navController = navController, viewModel = viewModel)
                 }
             )
         }

@@ -56,6 +56,19 @@ class MainViewModel(
             })
     }
 
+    fun updateClient(client: Client) = clientsRepo.updateClientsList(client)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Client>() {
+            override fun onSuccess(list: Client) {
+                Log.d("Success", "")
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
     fun getSalesList() {
         salesRepo.getSalesList().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

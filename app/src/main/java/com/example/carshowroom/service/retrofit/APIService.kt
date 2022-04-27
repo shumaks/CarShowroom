@@ -8,16 +8,18 @@ import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
-private const val BASE_URL = "http://192.168.100.9:8080/"
+private const val BASE_URL = "http://192.168.100.2:8080/"
 
 interface APIService {
 
     @GET("auto/getAll")
     fun getAuto(): Single<List<Auto>>
 
-    @GET("clients/gelAll")
+    @GET("clients/getAll")
     fun getClients(): Single<List<Client>>
 
     @GET("sales/getAll")
@@ -25,6 +27,12 @@ interface APIService {
 
     @GET("employees/getAll")
     fun getEmployees(): Single<List<Employee>>
+
+    @POST("clients/addClient")
+    fun addClient(client: Client)
+
+    @POST("clients/updateClient")
+    fun updateClient(@Body client: Client): Single<Client>
 
     companion object {
         var retrofitService: APIService? = null

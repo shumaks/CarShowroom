@@ -18,7 +18,7 @@ fun Navigation(
     NavHost(navController, startDestination = NavigationItem.Auto.route) {
         composable(NavigationItem.Clients.route) {
             viewModel.getClientsList()
-            ClientsScreen(viewModel)
+            ClientsScreen(viewModel, navController)
         }
         composable(NavigationItem.Employees.route) {
             viewModel.getEmployeesList()
