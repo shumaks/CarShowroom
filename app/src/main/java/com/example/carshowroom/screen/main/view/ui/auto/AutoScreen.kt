@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.carshowroom.R
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
 
 @Composable
 fun AutoScreen(
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    navController: NavHostController
 ) {
     val autoList by viewModel.autoListStateFlow.collectAsState()
 
@@ -36,7 +38,7 @@ fun AutoScreen(
             items(
                 items = autoList,
                 itemContent = {
-                    AutoListView(item = it)
+                    AutoListView(it, navController)
                 }
             )
         }

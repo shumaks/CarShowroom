@@ -1,5 +1,6 @@
 package com.example.carshowroom
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.example.carshowroom.repo.auto.AutoRepo
@@ -8,6 +9,7 @@ import com.example.carshowroom.repo.employee.EmployeesRepo
 import com.example.carshowroom.repo.sale.SalesRepo
 import com.example.carshowroom.screen.auth.router.AuthRouter
 import com.example.carshowroom.screen.auth.viewmodel.AuthViewModel
+import com.example.carshowroom.screen.main.view.MainActivity
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
 import com.example.carshowroom.service.retrofit.APIService
 import org.koin.android.ext.koin.androidContext
@@ -50,7 +52,11 @@ class App : Application() {
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         lateinit var instance: App private set
+        @SuppressLint("StaticFieldLeak")
         lateinit var context: Context private set
+        @SuppressLint("StaticFieldLeak")
+        lateinit var mainActivity: MainActivity
     }
 }

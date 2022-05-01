@@ -1,5 +1,6 @@
 package com.example.carshowroom.repo.auto
 
+import com.example.carshowroom.repo.auto.entity.Auto
 import com.example.carshowroom.service.retrofit.APIService
 
 class AutoRepo(
@@ -7,4 +8,8 @@ class AutoRepo(
 ) {
 
     fun getAutoList() = apiService.getAuto()
+
+    fun updateAutoList(auto: Auto) = apiService.updateAuto(auto)
+
+    fun getModeList() = apiService.getMode()
 }
