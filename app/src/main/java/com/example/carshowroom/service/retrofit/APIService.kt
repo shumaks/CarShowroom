@@ -21,7 +21,22 @@ interface APIService {
     fun getAuto(): Single<List<Auto>>
 
     @POST("auto/updateAuto")
-    fun updateAuto(@Body client: Auto): Single<Auto>
+    fun updateAuto(@Body auto: Auto): Single<Auto>
+
+    @POST("auto/addAuto")
+    fun addAuto(@Body auto: Auto): Single<Auto>
+
+    @POST("auto/deleteAuto")
+    fun deleteAuto(@Body id: Long): Single<Long>
+
+    @POST("clients/deleteClient")
+    fun deleteClient(@Body id: Long): Single<Long>
+
+    @POST("sales/deleteSale")
+    fun deleteSale(@Body id: Long): Single<Long>
+
+    @POST("employees/deleteEmployee")
+    fun deleteEmployee(@Body id: Long): Single<Long>
 
     @GET("mode/getAll")
     fun getMode(): Single<List<Mode>>
@@ -32,8 +47,20 @@ interface APIService {
     @GET("sales/getAll")
     fun getSales(): Single<List<Sale>>
 
+    @POST("sales/updateSale")
+    fun updateSale(@Body sale: Sale): Single<Sale>
+
+    @POST("sales/addSale")
+    fun addSale(@Body sale: Sale): Single<Sale>
+
     @GET("employees/getAll")
     fun getEmployees(): Single<List<Employee>>
+
+    @POST("employees/updateEmployee")
+    fun updateEmployee(@Body employee: Employee): Single<Employee>
+
+    @POST("employees/addEmployee")
+    fun addEmployee(@Body employee: Employee): Single<Employee>
 
     @POST("clients/addClient")
     fun addClient(@Body client: Client): Single<Client>

@@ -17,7 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.carshowroom.repo.auto.entity.Auto
 import com.example.carshowroom.repo.auto.entity.Mode
+import com.example.carshowroom.repo.client.entity.Client
+import com.example.carshowroom.repo.employee.entity.Employee
 
 @Composable
 fun <T> dropDownMenu(defaultIndex: Int, list: List<T>): T {
@@ -25,6 +28,9 @@ fun <T> dropDownMenu(defaultIndex: Int, list: List<T>): T {
     val items = list.map {
         when(it) {
             is Mode -> it.name
+            is Employee -> it.surname
+            is Client -> it.surname
+            is Auto -> it.model
             else -> TODO()
         }
     }

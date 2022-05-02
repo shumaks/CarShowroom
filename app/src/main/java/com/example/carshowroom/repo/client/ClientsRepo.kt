@@ -10,4 +10,8 @@ class ClientsRepo(
     fun getClientsList() = apiService.getClients()
 
     fun updateClientsList(client: Client) = apiService.updateClient(client)
+
+    fun addClient(client: Client) = apiService.addClient(client)
+
+    fun deleteClient(id: Long) = apiService.deleteClient(id)
 }

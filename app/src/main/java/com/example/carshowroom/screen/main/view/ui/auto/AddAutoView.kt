@@ -19,23 +19,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.carshowroom.screen.main.view.ui.NavigationItem
+import com.example.carshowroom.repo.auto.entity.Auto
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
-
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainViewModel) {
-    val auto = try {
-        viewModel.autoListStateFlow.value.first { it.id == id }
-    } catch (e: NoSuchElementException) {
-        null
-    }
+fun AddAutoView(
+    viewModel: MainViewModel,
+    navController: NavHostController
+) {
     val newAutoImage by viewModel.newAutoImageStateFlow.collectAsState()
-    val updatedAuto = remember { mutableStateOf(auto) }
+    val newAuto = remember { mutableStateOf(
+        Auto(
+            id = 0,
+            model = "",
+            sits = 0,
+            modelYear = 0,
+            image = null,
+            mode = viewModel.modeListStateFlow.value.first()
+        )
+    ) }
     val loadSpinner = remember { mutableStateOf(false) }
     if (newAutoImage != null) {
-        updatedAuto.value = updatedAuto.value?.copy(image = newAutoImage)
+        newAuto.value = newAuto.value.copy(image = newAutoImage)
     }
 
     Column {
@@ -45,16 +51,11 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val image = newAutoImage ?: auto?.image
-            image?.let {
-                if (it != "null") {
-                    AutoImage(it)
-                }
-            }
+            newAutoImage?.let { AutoImage(it) }
             Button(onClick = {
                 viewModel.selectPhoto()
             }) {
-                Text("Обновить картинку")
+                Text("Добавить картинку")
             }
         }
         Row(
@@ -64,10 +65,10 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Модель: ")
-            updatedAuto.value?.model?.let {
+            newAuto.value.model.let {
                 TextField(
                     value = it,
-                    onValueChange = { updatedAuto.value = updatedAuto.value!!.copy(model = it) }
+                    onValueChange = { newAuto.value = newAuto.value.copy(model = it) }
                 )
             }
         }
@@ -79,15 +80,9 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
         ) {
             Text("Год выпуска:  ")
             TextField(
-                value = updatedAuto.value?.modelYear.toString(),
+                value = newAuto.value.modelYear.toString(),
                 onValueChange = {
-                    updatedAuto.value = updatedAuto.value?.copy(
-                        modelYear = try {
-                            it.toInt()
-                        } catch (e: NumberFormatException) {
-                            0
-                        }
-                    )
+                    newAuto.value = newAuto.value.copy(modelYear = try { it.toInt() } catch(e: NumberFormatException) { 0 })
                 }
             )
         }
@@ -99,16 +94,8 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
         ) {
             Text("Количество мест: ")
             TextField(
-                value = updatedAuto.value?.sits.toString(),
-                onValueChange = {
-                    updatedAuto.value = updatedAuto.value?.copy(
-                        sits = try {
-                            it.toInt()
-                        } catch (e: NumberFormatException) {
-                            0
-                        }
-                    )
-                }
+                value = newAuto.value.sits.toString(),
+                onValueChange = { newAuto.value = newAuto.value.copy(sits = try { it.toInt() } catch(e: NumberFormatException) { 0 }) }
             )
         }
         Row(
@@ -121,10 +108,10 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
             Text("Модификация: ")
             val modeList = viewModel.modeListStateFlow.value
             val selectedMode = dropDownMenu(
-                defaultIndex = modeList.indexOf(updatedAuto.value?.mode),
+                defaultIndex = modeList.indexOf(newAuto.value.mode),
                 list = modeList
             )
-            updatedAuto.value = updatedAuto.value?.copy(mode = selectedMode)
+            newAuto.value = newAuto.value.copy(mode = selectedMode)
         }
         Row(
             modifier = Modifier
@@ -133,10 +120,10 @@ fun UpdateAutoView(id: Long, navController: NavHostController, viewModel: MainVi
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                updatedAuto.value?.let { viewModel.updateAuto(it, navController) }
+                viewModel.addAuto(newAuto.value, navController)
                 loadSpinner.value = true
             }) {
-                Text("Обновить")
+                Text("Добавить")
             }
         }
         if (loadSpinner.value) {

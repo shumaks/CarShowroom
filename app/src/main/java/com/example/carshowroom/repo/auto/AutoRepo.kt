@@ -12,4 +12,8 @@ class AutoRepo(
     fun updateAutoList(auto: Auto) = apiService.updateAuto(auto)
 
     fun getModeList() = apiService.getMode()
+
+    fun addAuto(auto: Auto) = apiService.addAuto(auto)
+
+    fun deleteAuto(id: Long) = apiService.deleteAuto(id)
 }

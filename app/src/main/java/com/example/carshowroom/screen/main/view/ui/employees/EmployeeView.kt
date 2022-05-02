@@ -1,8 +1,7 @@
-package com.example.carshowroom.screen.main.view.ui.clients
+package com.example.carshowroom.screen.main.view.ui.employees
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,13 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Scaffold
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,34 +20,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.carshowroom.repo.client.entity.Client
-import com.example.carshowroom.screen.main.view.ui.NavigationItem
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewModel) {
-    val client = viewModel.clientsListStateFlow.value.first { it.id == id }
-    val updateClient = remember { mutableStateOf(false) }
-    val updatedClient = remember { mutableStateOf(client) }
+fun EmployeeView(id: Long, navController: NavHostController, viewModel: MainViewModel) {
+    val employee = viewModel.employeeListStateFlow.value.first { it.id == id }
+    val updateEmployee = remember { mutableStateOf(false) }
+    val updatedEmployee = remember { mutableStateOf(employee) }
     val loadSpinner = remember { mutableStateOf(false) }
 
-    if (!updateClient.value) {
+    if (!updateEmployee.value) {
         Column {
-            Text(text = "${client.surname} ${client.name} ${client.patr}", style = typography.h6)
-            Text(text = client.phone, style = typography.body2)
+            Text(
+                text = "${employee.surname} ${employee.name} ${employee.patr}",
+                style = MaterialTheme.typography.h5
+            )
+            Text(text = employee.position, style = MaterialTheme.typography.h6)
+            Text(text = employee.phone, style = MaterialTheme.typography.body2)
+            Text(text = employee.address, style = MaterialTheme.typography.body2)
+
             Button(onClick = {
-                updateClient.value = true
+                updateEmployee.value = true
             }) {
                 Text("Редактировать")
             }
+
             Button(onClick = {
                 loadSpinner.value = true
-                viewModel.deleteClient(id, navController)
+                viewModel.deleteEmployee(id, navController)
             }) {
                 Text("Удалить")
             }
+
             if (loadSpinner.value) {
                 Row(
                     modifier = Modifier
@@ -74,8 +74,10 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
             ) {
                 Text("Фамилия: ")
                 TextField(
-                    value = updatedClient.value.surname,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(surname = it) }
+                    value = updatedEmployee.value.surname,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(surname = it)
+                    }
                 )
             }
             Row(
@@ -86,8 +88,10 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
             ) {
                 Text("Имя:  ")
                 TextField(
-                    value = updatedClient.value.name,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(name = it) }
+                    value = updatedEmployee.value.name,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(name = it)
+                    }
                 )
             }
             Row(
@@ -98,8 +102,24 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
             ) {
                 Text("Отчество: ")
                 TextField(
-                    value = updatedClient.value.patr,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(patr = it) }
+                    value = updatedEmployee.value.patr,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(patr = it)
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Должность: ")
+                TextField(
+                    value = updatedEmployee.value.position,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(position = it)
+                    }
                 )
             }
             Row(
@@ -110,9 +130,25 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
             ) {
                 Text("Номер телефона: ")
                 TextField(
-                    value = updatedClient.value.phone,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(phone = it) },
+                    value = updatedEmployee.value.phone,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(phone = it)
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Адрес: ")
+                TextField(
+                    value = updatedEmployee.value.address,
+                    onValueChange = {
+                        updatedEmployee.value = updatedEmployee.value.copy(address = it)
+                    }
                 )
             }
             Row(
@@ -122,7 +158,7 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(onClick = {
-                    viewModel.updateClient(updatedClient.value, navController)
+                    viewModel.updateEmployee(updatedEmployee.value, navController)
                     loadSpinner.value = true
                 }) {
                     Text("Обновить")

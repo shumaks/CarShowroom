@@ -1,58 +1,57 @@
-package com.example.carshowroom.screen.main.view.ui.clients
+package com.example.carshowroom.screen.main.view.ui.sales
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Scaffold
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.carshowroom.repo.client.entity.Client
-import com.example.carshowroom.screen.main.view.ui.NavigationItem
+import com.example.carshowroom.screen.main.view.ui.auto.dropDownMenu
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewModel) {
-    val client = viewModel.clientsListStateFlow.value.first { it.id == id }
-    val updateClient = remember { mutableStateOf(false) }
-    val updatedClient = remember { mutableStateOf(client) }
+fun SaleView(id: Long, navController: NavHostController, viewModel: MainViewModel) {
+    val sale = viewModel.salesListStateFlow.value.first { it.id == id }
+    val updateSale = remember { mutableStateOf(false) }
+    val updatedSale = remember { mutableStateOf(sale) }
     val loadSpinner = remember { mutableStateOf(false) }
 
-    if (!updateClient.value) {
+    if (!updateSale.value) {
         Column {
-            Text(text = "${client.surname} ${client.name} ${client.patr}", style = typography.h6)
-            Text(text = client.phone, style = typography.body2)
+            Text(
+                text = "Дата: ${sale.date}",
+                style = MaterialTheme.typography.h6
+            )
+            Text(text = "Сотрудник: ${sale.employee.surname} ${sale.employee.name} ${sale.employee.patr}", style = MaterialTheme.typography.body2)
+            Text(text = "Клиент: ${sale.client.surname} ${sale.client.name} ${sale.client.patr}", style = MaterialTheme.typography.body2)
+            Text(text = "Автомобиль: ${sale.auto.model}", style = MaterialTheme.typography.body2)
+            Text(text = "Сумма: ${sale.auto.mode.price} рублей", style = MaterialTheme.typography.body2)
+
             Button(onClick = {
-                updateClient.value = true
+                updateSale.value = true
             }) {
                 Text("Редактировать")
             }
+
             Button(onClick = {
                 loadSpinner.value = true
-                viewModel.deleteClient(id, navController)
+                viewModel.deleteSale(id, navController)
             }) {
                 Text("Удалить")
             }
+
             if (loadSpinner.value) {
                 Row(
                     modifier = Modifier
@@ -72,11 +71,12 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Фамилия: ")
-                TextField(
-                    value = updatedClient.value.surname,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(surname = it) }
-                )
+                Text("Дата: ${updatedSale.value.date}")
+                calendarView()
+                    .doOnNext {
+                        updatedSale.value = updatedSale.value.copy(date = it)
+                    }
+                    .subscribe()
             }
             Row(
                 modifier = Modifier
@@ -84,11 +84,13 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Имя:  ")
-                TextField(
-                    value = updatedClient.value.name,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(name = it) }
+                Text("Сотрудник: ")
+                val employeesList = viewModel.employeeListStateFlow.value
+                val selectedEmployee = dropDownMenu(
+                    defaultIndex = employeesList.indexOf(updatedSale.value.employee),
+                    list = employeesList
                 )
+                updatedSale.value = updatedSale.value.copy(employee = selectedEmployee)
             }
             Row(
                 modifier = Modifier
@@ -96,11 +98,13 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Отчество: ")
-                TextField(
-                    value = updatedClient.value.patr,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(patr = it) }
+                Text("Клиент: ")
+                val clientsList = viewModel.clientsListStateFlow.value
+                val selectedClient = dropDownMenu(
+                    defaultIndex = clientsList.indexOf(updatedSale.value.client),
+                    list = clientsList
                 )
+                updatedSale.value = updatedSale.value.copy(client = selectedClient)
             }
             Row(
                 modifier = Modifier
@@ -108,12 +112,13 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Номер телефона: ")
-                TextField(
-                    value = updatedClient.value.phone,
-                    onValueChange = { updatedClient.value = updatedClient.value.copy(phone = it) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                Text("Автомобиль: ")
+                val autoList = viewModel.autoListStateFlow.value
+                val selectedAuto = dropDownMenu(
+                    defaultIndex = autoList.indexOf(updatedSale.value.auto),
+                    list = autoList
                 )
+                updatedSale.value = updatedSale.value.copy(auto = selectedAuto)
             }
             Row(
                 modifier = Modifier
@@ -122,7 +127,7 @@ fun ClientView(id: Long, navController: NavHostController, viewModel: MainViewMo
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(onClick = {
-                    viewModel.updateClient(updatedClient.value, navController)
+                    viewModel.updateSale(updatedSale.value, navController)
                     loadSpinner.value = true
                 }) {
                     Text("Обновить")

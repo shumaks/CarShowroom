@@ -1,5 +1,6 @@
 package com.example.carshowroom.screen.main.view.ui.auto
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.carshowroom.repo.auto.entity.Auto
-import com.example.carshowroom.screen.main.view.ui.sales.NavigationRoute
+import com.example.carshowroom.screen.main.view.ui.NavigationRoute
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -33,20 +34,22 @@ fun AutoListView(item: Auto, navController: NavHostController) {
         }
     ) {
         item.image?.let {
-            AutoImage(it)
+            if (it != "null") {
+                AutoImage(it)
+            }
         }
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            val textColor = if (item.image != null) {
+            val textColor = if (item.image != null && item.image != "null") {
                 Color.White
             } else {
                 Color.Black
             }
             Text(text = item.model, style = typography.h6, color = textColor)
-            Text(text = item.mode.price.toString() + " рублей", style = typography.caption, color = Color.White)
+            Text(text = item.mode.price.toString() + " рублей", style = typography.caption, color = textColor)
         }
     }
 }

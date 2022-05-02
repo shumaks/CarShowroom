@@ -4,7 +4,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.carshowroom.App
 import com.example.carshowroom.repo.auto.AutoRepo
@@ -16,7 +15,6 @@ import com.example.carshowroom.repo.employee.EmployeesRepo
 import com.example.carshowroom.repo.employee.entity.Employee
 import com.example.carshowroom.repo.sale.SalesRepo
 import com.example.carshowroom.repo.sale.entity.Sale
-import com.example.carshowroom.screen.main.view.MainActivity
 import com.example.carshowroom.screen.main.view.ui.NavigationItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.annotations.NonNull
@@ -66,6 +64,20 @@ class MainViewModel(
             }
         })
 
+    fun addAuto(auto: Auto, navController: NavHostController) = autoRepo.addAuto(auto)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Auto>() {
+            override fun onSuccess(auto: Auto) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Auto.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
     fun getModeList() {
         autoRepo.getModeList().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -94,12 +106,27 @@ class MainViewModel(
             })
     }
 
-    fun updateClient(client: Client) = clientsRepo.updateClientsList(client)
+    fun updateClient(client: Client, navController: NavHostController) = clientsRepo.updateClientsList(client)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(object : DisposableSingleObserver<Client>() {
             override fun onSuccess(client: Client) {
                 Log.d("Success", "")
+                navController.navigate(NavigationItem.Clients.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun addClient(client: Client, navController: NavHostController) = clientsRepo.addClient(client)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Client>() {
+            override fun onSuccess(client: Client) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Clients.route)
             }
 
             override fun onError(@NonNull e: Throwable) {
@@ -121,6 +148,34 @@ class MainViewModel(
             })
     }
 
+    fun updateSale(sale: Sale, navController: NavHostController) = salesRepo.updateSalesList(sale)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Sale>() {
+            override fun onSuccess(sale: Sale) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Sales.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun addSale(sale: Sale, navController: NavHostController) = salesRepo.addSale(sale)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Sale>() {
+            override fun onSuccess(sale: Sale) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Sales.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
     fun getEmployeesList() {
         employeesRepo.getEmployeesList().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -134,6 +189,90 @@ class MainViewModel(
                 }
             })
     }
+
+    fun updateEmployee(employee: Employee, navController: NavHostController) = employeesRepo.updateEmployeesList(employee)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Employee>() {
+            override fun onSuccess(employee: Employee) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Employees.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun addEmployee(employee: Employee, navController: NavHostController) = employeesRepo.addEmployee(employee)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Employee>() {
+            override fun onSuccess(employee: Employee) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Employees.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun deleteEmployee(id: Long, navController: NavHostController) = employeesRepo.deleteEmployee(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Long>() {
+            override fun onSuccess(id: Long) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Employees.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun deleteClient(id: Long, navController: NavHostController) = clientsRepo.deleteClient(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Long>() {
+            override fun onSuccess(id: Long) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Clients.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun deleteAuto(id: Long, navController: NavHostController) = autoRepo.deleteAuto(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Long>() {
+            override fun onSuccess(id: Long) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Auto.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
+
+    fun deleteSale(id: Long, navController: NavHostController) = salesRepo.deleteSale(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(object : DisposableSingleObserver<Long>() {
+            override fun onSuccess(id: Long) {
+                Log.d("Success", "")
+                navController.navigate(NavigationItem.Sales.route)
+            }
+
+            override fun onError(@NonNull e: Throwable) {
+                Log.d("Error", e.toString())
+            }
+        })
 
     fun selectPhoto() {
         val photoPickerIntent = Intent(Intent.ACTION_PICK)
