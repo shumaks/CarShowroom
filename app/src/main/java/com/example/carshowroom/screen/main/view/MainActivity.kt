@@ -1,14 +1,14 @@
 package com.example.carshowroom.screen.main.view
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.carshowroom.App
@@ -25,15 +25,18 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var viewModel: MainViewModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.mainActivity = this
         verifyStoragePermissions()
         supportActionBar?.hide()
 
+        val isDirector = intent.getBooleanExtra("isDirector", false)
+
         setContent {
             viewModel = getViewModel()
-            MainScreenView(viewModel)
+            MainScreenView(viewModel, isDirector)
         }
     }
 

@@ -16,7 +16,8 @@ import com.example.carshowroom.R
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController
+    navController: NavController,
+    isDirector: Boolean
 ) {
     val items = listOf(
         NavigationItem.Auto,
@@ -32,25 +33,32 @@ fun BottomNavigationBar(
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title) },
-                selectedContentColor = Color.White,
-                unselectedContentColor = Color.White.copy(0.4f),
-                alwaysShowLabel = true,
-                selected = currentRoute == item.route,
-                onClick = {
-                    navController.navigate(item.route) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
+            if (isDirector || (!isDirector && item !is NavigationItem.Employees)) {
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(id = item.icon),
+                            contentDescription = item.title
+                        )
+                    },
+                    label = { Text(text = item.title) },
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color.White.copy(0.4f),
+                    alwaysShowLabel = true,
+                    selected = currentRoute == item.route,
+                    onClick = {
+                        navController.navigate(item.route) {
+                            navController.graph.startDestinationRoute?.let { route ->
+                                popUpTo(route) {
+                                    saveState = true
+                                }
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

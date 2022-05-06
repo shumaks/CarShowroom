@@ -5,6 +5,8 @@ import com.example.carshowroom.repo.auto.entity.Mode
 import com.example.carshowroom.repo.client.entity.Client
 import com.example.carshowroom.repo.employee.entity.Employee
 import com.example.carshowroom.repo.sale.entity.Sale
+import com.example.carshowroom.repo.user.entity.User
+import com.google.gson.GsonBuilder
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
@@ -12,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+
 
 private const val BASE_URL = "http://192.168.100.2:8080/"
 
@@ -68,13 +71,23 @@ interface APIService {
     @POST("clients/updateClient")
     fun updateClient(@Body client: Client): Single<Client>
 
+    @POST("users/auth")
+    fun loginUser(@Body user: User): Single<String>
+
+    @POST("users/addUser")
+    fun addUser(@Body user: User): Single<Boolean>
+
     companion object {
         var retrofitService: APIService? = null
         fun getInstance() : APIService {
             if (retrofitService == null) {
+                val gson = GsonBuilder()
+                    .setLenient()
+                    .create()
+
                 val retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .build()
                 retrofitService = retrofit.create(APIService::class.java)

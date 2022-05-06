@@ -20,7 +20,7 @@ import org.koin.dsl.module
 class App : Application() {
 
     private val viewModelModule = module {
-        viewModel { AuthViewModel(get()) }
+        viewModel { AuthViewModel(get(), get(), applicationContext) }
         viewModel { MainViewModel(get(), get(), get(), get()) }
     }
 
