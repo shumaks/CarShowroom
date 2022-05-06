@@ -18,7 +18,6 @@ fun MainScreenView(viewModel: MainViewModel, isDirector: Boolean) {
         val navController = rememberNavController()
 
         Scaffold(
-            topBar = { TopBar() },
             bottomBar = { BottomNavigationBar(navController, isDirector) }
         ) {
             Navigation(navController, viewModel)
