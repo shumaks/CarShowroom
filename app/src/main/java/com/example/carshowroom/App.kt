@@ -6,6 +6,7 @@ import android.content.Context
 import com.example.carshowroom.repo.auto.AutoRepo
 import com.example.carshowroom.repo.client.ClientsRepo
 import com.example.carshowroom.repo.employee.EmployeesRepo
+import com.example.carshowroom.repo.mode.ModeRepo
 import com.example.carshowroom.repo.sale.SalesRepo
 import com.example.carshowroom.screen.auth.router.AuthRouter
 import com.example.carshowroom.screen.auth.viewmodel.AuthViewModel
@@ -21,7 +22,7 @@ class App : Application() {
 
     private val viewModelModule = module {
         viewModel { AuthViewModel(get(), get(), applicationContext) }
-        viewModel { MainViewModel(get(), get(), get(), get()) }
+        viewModel { MainViewModel(get(), get(), get(), get(), get()) }
     }
 
     private val routerModule = module {
@@ -37,6 +38,7 @@ class App : Application() {
         single { ClientsRepo(get()) }
         single { SalesRepo(get()) }
         single { EmployeesRepo(get()) }
+        single { ModeRepo(get()) }
     }
 
     override fun onCreate() {

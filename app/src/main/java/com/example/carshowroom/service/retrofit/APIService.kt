@@ -1,7 +1,7 @@
 package com.example.carshowroom.service.retrofit
 
 import com.example.carshowroom.repo.auto.entity.Auto
-import com.example.carshowroom.repo.auto.entity.Mode
+import com.example.carshowroom.repo.mode.entity.Mode
 import com.example.carshowroom.repo.client.entity.Client
 import com.example.carshowroom.repo.employee.entity.Employee
 import com.example.carshowroom.repo.sale.entity.Sale
@@ -29,8 +29,14 @@ interface APIService {
     @POST("auto/addAuto")
     fun addAuto(@Body auto: Auto): Single<Auto>
 
+    @POST("mode/addMode")
+    fun addMode(@Body mode: Mode): Single<Mode>
+
     @POST("auto/deleteAuto")
     fun deleteAuto(@Body id: Long): Single<Long>
+
+    @POST("mode/deleteMode")
+    fun deleteMode(@Body id: Long): Single<Long>
 
     @POST("clients/deleteClient")
     fun deleteClient(@Body id: Long): Single<Long>
@@ -52,6 +58,9 @@ interface APIService {
 
     @POST("sales/updateSale")
     fun updateSale(@Body sale: Sale): Single<Sale>
+
+    @POST("mode/updateMode")
+    fun updateMode(@Body mode: Mode): Single<Mode>
 
     @POST("sales/addSale")
     fun addSale(@Body sale: Sale): Single<Sale>

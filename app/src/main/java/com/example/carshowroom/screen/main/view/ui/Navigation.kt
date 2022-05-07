@@ -19,6 +19,10 @@ import com.example.carshowroom.screen.main.view.ui.clients.ClientsScreen
 import com.example.carshowroom.screen.main.view.ui.employees.AddEmployeeView
 import com.example.carshowroom.screen.main.view.ui.employees.EmployeeView
 import com.example.carshowroom.screen.main.view.ui.employees.EmployeesScreen
+import com.example.carshowroom.screen.main.view.ui.mode.AddModeView
+import com.example.carshowroom.screen.main.view.ui.mode.ModeScreen
+import com.example.carshowroom.screen.main.view.ui.mode.ModeView
+import com.example.carshowroom.screen.main.view.ui.mode.UpdateModeView
 import com.example.carshowroom.screen.main.view.ui.sales.AddSaleView
 import com.example.carshowroom.screen.main.view.ui.sales.SaleView
 import com.example.carshowroom.screen.main.view.ui.sales.SalesScreen
@@ -105,6 +109,28 @@ fun Navigation(
             it.arguments?.getLong("idAuto")?.let { idAuto ->
                 AutoView(idAuto, navController, viewModel)
             }
+        }
+        composable(NavigationRoute.ModeListView.value) {
+            ModeScreen(viewModel, navController)
+        }
+        composable(
+            route = "${NavigationRoute.ModeView.value}/{idMode}",
+            arguments = listOf(navArgument("idMode") { type = NavType.LongType })
+        ) {
+            it.arguments?.getLong("idMode")?.let { idMode ->
+                ModeView(idMode, navController, viewModel)
+            }
+        }
+        composable(
+            route = "${NavigationRoute.UpdateMode.value}/{idMode}",
+            arguments = listOf(navArgument("idMode") { type = NavType.LongType })
+        ) {
+            it.arguments?.getLong("idMode")?.let { idMode ->
+                UpdateModeView(idMode, navController, viewModel)
+            }
+        }
+        composable(NavigationRoute.AddMode.value) {
+            AddModeView(viewModel, navController)
         }
     }
 }

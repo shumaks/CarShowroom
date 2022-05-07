@@ -1,4 +1,4 @@
-package com.example.carshowroom.repo.auto.entity
+package com.example.carshowroom.repo.mode.entity
 
 data class Mode(
     val id: Long,

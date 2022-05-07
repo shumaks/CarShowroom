@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.carshowroom.repo.auto.entity.Auto
-import com.example.carshowroom.repo.auto.entity.Mode
+import com.example.carshowroom.repo.mode.entity.Mode
 import com.example.carshowroom.repo.client.entity.Client
 import com.example.carshowroom.repo.employee.entity.Employee
 

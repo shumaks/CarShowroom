@@ -1,5 +1,7 @@
 package com.example.carshowroom.repo.auto.entity
 
+import com.example.carshowroom.repo.mode.entity.Mode
+
 data class Auto(
     var id: Long,
     val model: String,

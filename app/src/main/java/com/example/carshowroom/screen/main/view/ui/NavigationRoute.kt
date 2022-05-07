@@ -11,4 +11,8 @@ sealed class NavigationRoute(val value: String) {
     object ClientView : NavigationRoute("clientView")
     object EmployeeView : NavigationRoute("employeeView")
     object SaleView : NavigationRoute("saleView")
+    object ModeListView : NavigationRoute("modeListView")
+    object UpdateMode : NavigationRoute("updateMode")
+    object AddMode : NavigationRoute("addMode")
+    object ModeView : NavigationRoute("modeView")
 }

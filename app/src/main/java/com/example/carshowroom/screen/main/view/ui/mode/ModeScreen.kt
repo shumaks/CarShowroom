@@ -1,4 +1,4 @@
-package com.example.carshowroom.screen.main.view.ui.auto
+package com.example.carshowroom.screen.main.view.ui.mode
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +28,11 @@ import com.example.carshowroom.screen.main.view.ui.NavigationRoute
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
 
 @Composable
-fun AutoScreen(
+fun ModeScreen(
     viewModel: MainViewModel,
     navController: NavHostController
 ) {
-    val autoList by viewModel.autoListStateFlow.collectAsState()
+    val modeList by viewModel.modeListStateFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -48,22 +48,7 @@ fun AutoScreen(
         ) {
             Button(
                 onClick = {
-                    navController.navigate(NavigationRoute.ModeListView.value)
-                }
-            ) {
-                Text("Модификации")
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {
-                    navController.navigate(NavigationRoute.AddAuto.value)
+                    navController.navigate(NavigationRoute.AddMode.value)
                 }
             ) {
                 Text("+")
@@ -75,9 +60,9 @@ fun AutoScreen(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(
-                items = autoList,
+                items = modeList,
                 itemContent = {
-                    AutoListView(it, navController)
+                    ModeListView(it, navController)
                 }
             )
         }
