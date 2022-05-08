@@ -12,17 +12,20 @@ import com.example.carshowroom.screen.auth.router.AuthRouter
 import com.example.carshowroom.screen.auth.viewmodel.AuthViewModel
 import com.example.carshowroom.screen.main.view.MainActivity
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
+import com.example.carshowroom.service.file.FileService
 import com.example.carshowroom.service.retrofit.APIService
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
+const val APP_TAG = "AndroidRuntime"
+
 class App : Application() {
 
     private val viewModelModule = module {
-        viewModel { AuthViewModel(get(), get(), applicationContext) }
-        viewModel { MainViewModel(get(), get(), get(), get(), get()) }
+        viewModel { AuthViewModel(get(), get(), get()) }
+        viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
     }
 
     private val routerModule = module {
@@ -31,6 +34,7 @@ class App : Application() {
 
     private val serviceModule = module {
         single { APIService.getInstance() }
+        single { FileService(get()) }
     }
 
     private val repoModule = module {

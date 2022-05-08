@@ -17,6 +17,7 @@ import com.example.carshowroom.repo.mode.ModeRepo
 import com.example.carshowroom.repo.sale.SalesRepo
 import com.example.carshowroom.repo.sale.entity.Sale
 import com.example.carshowroom.screen.main.view.ui.NavigationItem
+import com.example.carshowroom.service.file.FileService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
@@ -28,7 +29,8 @@ class MainViewModel(
     private val clientsRepo: ClientsRepo,
     private val salesRepo: SalesRepo,
     private val employeesRepo: EmployeesRepo,
-    private val modeRepo: ModeRepo
+    private val modeRepo: ModeRepo,
+    private val fileService: FileService
 ) : ViewModel() {
 
     val autoListStateFlow = MutableStateFlow<List<Auto>>(emptyList())
@@ -37,6 +39,8 @@ class MainViewModel(
     val salesListStateFlow = MutableStateFlow<List<Sale>>(emptyList())
     val employeeListStateFlow = MutableStateFlow<List<Employee>>(emptyList())
     val newAutoImageStateFlow = MutableStateFlow<String?>(null)
+
+    fun createPdfFile(sale: Sale) = fileService.createPdfFile(sale)
 
     fun getAutoList() {
         autoRepo.getAutoList().subscribeOn(Schedulers.io())

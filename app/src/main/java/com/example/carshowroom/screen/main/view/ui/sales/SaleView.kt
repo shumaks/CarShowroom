@@ -40,6 +40,12 @@ fun SaleView(id: Long, navController: NavHostController, viewModel: MainViewMode
             Text(text = "Сумма: ${sale.auto.mode.price} рублей", style = MaterialTheme.typography.body2)
 
             Button(onClick = {
+                viewModel.createPdfFile(sale)
+            }) {
+                Text("Сохранить в PDF")
+            }
+
+            Button(onClick = {
                 updateSale.value = true
             }) {
                 Text("Редактировать")
