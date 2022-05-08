@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +38,8 @@ import com.example.carshowroom.screen.main.view.ui.NavigationRoute
 import com.example.carshowroom.screen.main.view.ui.SearchView
 import com.example.carshowroom.screen.main.view.ui.auto.AutoListView
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.Locale
 
 @Composable
@@ -46,6 +49,7 @@ fun EmployeesScreen(
     val employeesList by viewModel.employeeListStateFlow.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     var filteredEmployeesList: List<Employee>
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Column(
         modifier = Modifier
@@ -61,44 +65,63 @@ fun EmployeesScreen(
         ) {
             SearchView(textState)
         }
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {
-                    navController.navigate(NavigationRoute.AddEmployee.value)
-                }
+        if (employeesList.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text("+")
+                CircularProgressIndicator()
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        navController.navigate(NavigationRoute.AddEmployee.value)
+                    }
+                ) {
+                    Text("+")
+                }
             }
         }
-        LazyColumn(
-            modifier = Modifier.padding(bottom = 50.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = {
+                viewModel.employeeListStateFlow.value = emptyList()
+                viewModel.getEmployeesList()
+            },
         ) {
-            val searchedText = textState.value.text
-            filteredEmployeesList = if (searchedText.isEmpty()) {
-                employeesList
-            } else {
-                val resultList = ArrayList<Employee>()
-                for (employee in employeesList) {
-                    if (employee.surname.lowercase(Locale.getDefault())
-                            .contains(searchedText.lowercase(Locale.getDefault()))
-                    ) {
-                        resultList.add(employee)
+            LazyColumn(
+                modifier = Modifier.padding(bottom = 50.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                val searchedText = textState.value.text
+                filteredEmployeesList = if (searchedText.isEmpty()) {
+                    employeesList
+                } else {
+                    val resultList = ArrayList<Employee>()
+                    for (employee in employeesList) {
+                        if (employee.surname.lowercase(Locale.getDefault())
+                                .contains(searchedText.lowercase(Locale.getDefault()))
+                        ) {
+                            resultList.add(employee)
+                        }
                     }
+                    resultList
                 }
-                resultList
+                items(
+                    items = filteredEmployeesList,
+                    itemContent = {
+                        EmployeesListView(it, navController)
+                    }
+                )
             }
-            items(
-                items = filteredEmployeesList,
-                itemContent = {
-                    EmployeesListView(it, navController)
-                }
-            )
         }
     }
 }

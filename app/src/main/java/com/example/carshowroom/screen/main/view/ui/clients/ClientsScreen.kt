@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +38,8 @@ import com.example.carshowroom.screen.main.view.ui.NavigationRoute
 import com.example.carshowroom.screen.main.view.ui.SearchView
 import com.example.carshowroom.screen.main.view.ui.auto.AutoListView
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.Locale
 
 @Composable
@@ -44,6 +47,7 @@ fun ClientsScreen(viewModel: MainViewModel, navController: NavHostController) {
     val clientsList by viewModel.clientsListStateFlow.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     var filteredClientsList: List<Client>
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Column(
         modifier = Modifier
@@ -59,44 +63,64 @@ fun ClientsScreen(viewModel: MainViewModel, navController: NavHostController) {
         ) {
             SearchView(textState)
         }
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {
-                    navController.navigate(NavigationRoute.AddClient.value)
-                }
+
+        if (clientsList.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text("+")
+                CircularProgressIndicator()
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        navController.navigate(NavigationRoute.AddClient.value)
+                    }
+                ) {
+                    Text("+")
+                }
             }
         }
-        LazyColumn(
-            modifier = Modifier.padding(bottom = 50.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = {
+                viewModel.clientsListStateFlow.value = emptyList()
+                viewModel.getClientsList()
+            },
         ) {
-            val searchedText = textState.value.text
-            filteredClientsList = if (searchedText.isEmpty()) {
-                clientsList
-            } else {
-                val resultList = ArrayList<Client>()
-                for (client in clientsList) {
-                    if (client.surname.lowercase(Locale.getDefault())
-                            .contains(searchedText.lowercase(Locale.getDefault()))
-                    ) {
-                        resultList.add(client)
+            LazyColumn(
+                modifier = Modifier.padding(bottom = 50.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                val searchedText = textState.value.text
+                filteredClientsList = if (searchedText.isEmpty()) {
+                    clientsList
+                } else {
+                    val resultList = ArrayList<Client>()
+                    for (client in clientsList) {
+                        if (client.surname.lowercase(Locale.getDefault())
+                                .contains(searchedText.lowercase(Locale.getDefault()))
+                        ) {
+                            resultList.add(client)
+                        }
                     }
+                    resultList
                 }
-                resultList
+                items(
+                    items = filteredClientsList,
+                    itemContent = {
+                        ClientsListView(item = it, navController = navController)
+                    }
+                )
             }
-            items(
-                items = filteredClientsList,
-                itemContent = {
-                    ClientsListView(item = it, navController = navController)
-                }
-            )
         }
     }
 }

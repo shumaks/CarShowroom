@@ -1,6 +1,7 @@
 package com.example.carshowroom.screen.main.view.ui.sales
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,9 @@ fun calendarView(): Observable<String> {
 
         Button(onClick = {
             datePickerDialog.show()
+            datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setBackgroundColor(Color.WHITE)
+            datePickerDialog.getButton(DatePickerDialog.BUTTON_NEUTRAL).setBackgroundColor(Color.WHITE)
+            datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setBackgroundColor(Color.WHITE)
         }) {
             Text("Выбрать дату")
         }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,8 @@ import com.example.carshowroom.repo.mode.entity.Mode
 import com.example.carshowroom.screen.main.view.ui.NavigationRoute
 import com.example.carshowroom.screen.main.view.ui.SearchView
 import com.example.carshowroom.screen.main.viewmodel.MainViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.Locale
 
 @Composable
@@ -42,6 +45,7 @@ fun ModeScreen(
     val modeList by viewModel.modeListStateFlow.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     var filteredModeList: List<Mode>
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Column(
         modifier = Modifier
@@ -57,45 +61,63 @@ fun ModeScreen(
         ) {
             SearchView(textState)
         }
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {
-                    navController.navigate(NavigationRoute.AddMode.value)
-                }
+        if (modeList.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text("+")
+                CircularProgressIndicator()
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        navController.navigate(NavigationRoute.AddMode.value)
+                    }
+                ) {
+                    Text("+")
+                }
             }
         }
-
-        LazyColumn(
-            modifier = Modifier.padding(bottom = 50.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = {
+                viewModel.modeListStateFlow.value = emptyList()
+                viewModel.getModeList()
+            },
         ) {
-            val searchedText = textState.value.text
-            filteredModeList = if (searchedText.isEmpty()) {
-                modeList
-            } else {
-                val resultList = ArrayList<Mode>()
-                for (mode in modeList) {
-                    if (mode.name.lowercase(Locale.getDefault())
-                            .contains(searchedText.lowercase(Locale.getDefault()))
-                    ) {
-                        resultList.add(mode)
+            LazyColumn(
+                modifier = Modifier.padding(bottom = 50.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                val searchedText = textState.value.text
+                filteredModeList = if (searchedText.isEmpty()) {
+                    modeList
+                } else {
+                    val resultList = ArrayList<Mode>()
+                    for (mode in modeList) {
+                        if (mode.name.lowercase(Locale.getDefault())
+                                .contains(searchedText.lowercase(Locale.getDefault()))
+                        ) {
+                            resultList.add(mode)
+                        }
                     }
+                    resultList
                 }
-                resultList
+                items(
+                    items = filteredModeList,
+                    itemContent = {
+                        ModeListView(it, navController)
+                    }
+                )
             }
-            items(
-                items = filteredModeList,
-                itemContent = {
-                    ModeListView(it, navController)
-                }
-            )
         }
     }
 }

@@ -39,6 +39,7 @@ class MainViewModel(
     val salesListStateFlow = MutableStateFlow<List<Sale>>(emptyList())
     val employeeListStateFlow = MutableStateFlow<List<Employee>>(emptyList())
     val newAutoImageStateFlow = MutableStateFlow<String?>(null)
+    val isRefreshing = MutableStateFlow(false)
 
     fun createPdfFile(sale: Sale) = fileService.createPdfFile(sale)
 
